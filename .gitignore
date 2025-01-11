@@ -1,12 +1,12 @@
-/rollup/build/
-/dist/mapbox-gl*
-/dist/versions*
-/dist/style-spec
-*.es.js
-*.js.map
-*.cjs.map
+# /rollup/build/
+# /dist/mapbox-gl*
+# /dist/versions*
+# /dist/style-spec
+# *.es.js
+# *.js.map
+# *.cjs.map
 node_modules
-yarn.lock
+# yarn.lock
 .vscode/
 *.sublime-*
 coverage
