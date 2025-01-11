@@ -1684,7 +1684,8 @@ class Transform {
         let raycast: vec3 | null | undefined = this.projection.pointCoordinate3D(this, p.x, p.y);
         if (raycast) return new MercatorCoordinate(raycast[0], raycast[1], raycast[2]);
         let start = 0, end = this.horizonLineFromTop();
-        if (p.y > end) return this.pointCoordinate(p); // holes between tiles below horizon line or below bottom.
+        // console.log(end)
+        // if (p.y > end) return this.pointCoordinate(p); // holes between tiles below horizon line or below bottom.
         const samples = 10;
         const threshold = 0.02 * end;
         const r = p.clone();
@@ -1890,11 +1891,17 @@ class Transform {
      * If horizon is not visible, returns 0 by default or a negative value if called with clampToTop = false.
      * @private
      */
-    horizonLineFromTop(clampToTop: boolean = true): number {
+    horizonLineFromTop(clampToTop: boolean = false): number {
         // h is height of space above map center to horizon.
-        const h = this.height / 2 / Math.tan(this._fov / 2) / Math.tan(Math.max(this._pitch, 0.1)) - this.centerOffset.y;
-        const offset = this.height / 2 - h * (1 - this._horizonShift);
-        return clampToTop ? Math.max(0, offset) : offset;
+        // NOTE: We changed this because we don't need to sdjust the calculation based on the pitch... I think...
+        // const h = this.height / 2 / Math.tan(this._fov / 2) / Math.tan(Math.max(this._pitch, 0.1)) - this.centerOffset.y;
+        const h = this.height / 2 / Math.tan(this._fov / 2) / Math.tan(this._pitch) - this.centerOffset.y;
+        // const offset = this.height / 2 - h * (1 - this._horizonShift);
+        // NOTE: We changed this because the horizon is irrelevent for you... probably
+        const offset = this.height / 2 - h;
+        // return clampToTop ? Math.max(0, offset) : offset;
+        // NOTE: We changed this because I'm pretty sure we have no reason to clamp this... maybe
+        return offset;
     }
 
     /**
